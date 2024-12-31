@@ -1,5 +1,6 @@
 <template>
   <PageLayout>
+    <!-- Header -->
     <template #header>
       <div class="mb-6 flex flex-col gap-1">
         <div class="flex items-center gap-2">
@@ -10,6 +11,7 @@
       </div>
     </template>
 
+    <!-- Content -->
     <template #content>
       <TaskInput @add-task="addTask" />
       <div class="mt-4">
@@ -23,23 +25,22 @@
 
     <!-- Completed Tasks -->
     <template #completed>
-      <div class="mt-6">
-        <div class="font-semibold">Completed Tasks</div>
-        <TaskList
-          :tasks="completedTasks"
-          @delete-task="deleteTask"
-          @view-task="viewTask"
-          @mark-complete="markComplete"
-        />
-      </div>
+      <TaskList
+        :tasks="completedTasks"
+        @delete-task="deleteTask"
+        @view-task="viewTask"
+      />
     </template>
 
+    <!-- Task Details -->
     <template #detail v-if="selectedTask">
       <DetailContent
+        :id="selectedTask.id"
         :title="selectedTask.title"
         :date="selectedTask.date"
         :note="selectedTask.note"
         :important="selectedTask.important"
+        @update-task="handleUpdateTask"
       />
     </template>
   </PageLayout>
@@ -48,30 +49,20 @@
 <script setup lang="ts">
 import { Sun } from 'lucide-vue-next';
 import { useTaskStore } from '@/stores/taskStore';
-
 // Access the Pinia store
 const taskStore = useTaskStore();
 
 // Computed properties
-const todayTasks = computed(() => taskStore.todayTasks);
+const todayTasks = computed(() => [...taskStore.todayTasks].reverse());
+const completedTasks = computed(() => taskStore.completedTasks);
 const selectedTask = computed(() => taskStore.selectedTask);
-// const tasks = computed(() => taskStore.tasks);
-const completedTasks = computed(() => todayTasks.value.filter((task) => task.completed));
 
 // Methods
 const addTask = (task) => taskStore.addTask(task);
 const deleteTask = (id) => taskStore.deleteTask(id);
-const viewTask = (task) => {
-   taskStore.viewTask(task);
-   console.log(task.title)
-} 
-const markComplete = (taskId: string) => {
-  console.log("Mark complete event received:", taskId);
-  taskStore.markComplete(taskId);
-};
+const viewTask = (task) => taskStore.viewTask(task);
+const handleUpdateTask = (updatedTask) => taskStore.updateTask(updatedTask);
 
-
-// console.log(completedTasks)
 // Format current date
 const formattedDate = computed(() =>
   new Date().toLocaleDateString('en-US', {

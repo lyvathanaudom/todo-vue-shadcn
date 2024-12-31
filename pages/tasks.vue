@@ -1,61 +1,70 @@
 <template>
   <PageLayout>
     <template #header>
-      <div class="mb-6 flex flex-col gap-1">
+      <div class="mb-6 flex items-center gap-2">
+        <ClipboardList/> 
         <div class="font-semibold text-2xl">All tasks</div>
       </div>
     </template>
-
-    <!-- Pending Tasks -->
     <template #content>
       <TaskInput @add-task="addTask" />
       <div class="mt-4">
         <TaskList
-          :tasks="pendingTasks"
+          :tasks="tasks"
           @delete-task="deleteTask"
           @view-task="viewTask"
-          @mark-complete="markComplete"
+          
         />
       </div>
     </template>
 
     <!-- Completed Tasks -->
     <template #completed>
-      <div class="mt-6">
-        <h2 class="font-semibold text-xl">Completed Tasks</h2>
-        <TaskList
-          :tasks="completedTasks"
-          @delete-task="deleteTask"
-          @view-task="viewTask"
-          @mark-complete="markComplete"
-        />
-      </div>
+      <TaskList
+        :tasks="completedTasks"
+        @delete-task="deleteTask"
+        @view-task="viewTask"
+      />
     </template>
 
     <!-- Task Details -->
     <template #detail v-if="selectedTask">
       <DetailContent
-        :title="selectedTask?.title"
-        :date="selectedTask?.date"
-        :note="selectedTask?.note"
-        :important="selectedTask?.important"
+        :id="selectedTask.id"
+        :title="selectedTask.title"
+        :date="selectedTask.date"
+        :note="selectedTask.note"
+        :important="selectedTask.important"
+        @update-task="handleUpdateTask"
       />
     </template>
   </PageLayout>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useTaskStore } from '@/stores/taskStore';
-
-// Task store
+import { useTaskStore } from "@/stores/taskStore";
+import { ClipboardList } from 'lucide-vue-next';
 const taskStore = useTaskStore();
-const { tasks, addTask, deleteTask, viewTask, markComplete } = taskStore;
-
-// Computed properties for filtering tasks
-const pendingTasks = computed(() => tasks.filter((task) => !task.completed));
-const completedTasks = computed(() => tasks.filter((task) => task.completed));
-
-// Selected task for detail view
+// Computed properties
+const tasks = computed(() => {
+  return taskStore.tasks.filter(task => !task.completed);
+});
 const selectedTask = computed(() => taskStore.selectedTask);
+const completedTasks = computed(() => taskStore.completedTasks);
+// Task store
+// Methods
+const addTask = (task) => {
+  console.log("Adding task:", task); // Log the task being added
+  taskStore.addTask(task);
+};
+const deleteTask = (id) => {
+  console.log("Deleting task with ID:", id); // Log the task ID being deleted
+  taskStore.deleteTask(id);
+};
+const handleUpdateTask = (updatedTask) => taskStore.updateTask(updatedTask);
+
+const viewTask = (task) => {
+  taskStore.viewTask(task);
+  console.log("Viewing task:", task.title);
+};
 </script>

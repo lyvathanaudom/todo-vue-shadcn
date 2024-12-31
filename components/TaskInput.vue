@@ -34,56 +34,70 @@
 
     <!-- Submit Button -->
     <Button type="submit">Add Task</Button>
+    <Transition name="fade">
+
+
+    <Alert v-show="alertError" variant="destructive">
+      <AlertCircle class="w-4 h-4" />
+      <AlertTitle>Failed</AlertTitle>
+      <AlertDescription> Please input your task</AlertDescription>
+    </Alert>
+  </Transition>
   </form>
 </template>
+
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRoute } from "vue-router";
-import { type DateValue, getLocalTimeZone, today } from "@internationalized/date";
-
-const route = useRoute(); // Get the current route
-const title = ref(""); // Task title input
-const note = ref(""); // Note input
-const showNote = ref(false); // Controls visibility of the note field
-
-// Default date: "today" if on the MyDay page
+import { AlertCircle } from "lucide-vue-next";
+import {
+  type DateValue,
+  getLocalTimeZone,
+  today,
+} from "@internationalized/date";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+// Reactive state variables
+const title = ref("");
+const note = ref("");
+const showNote = ref(false);
+const route = useRoute();
+const alertError = ref(false)
+// Initialize date and important based on the current route
 const date = ref<DateValue | undefined>(
   route.name === "myday" ? today(getLocalTimeZone()) : undefined
 );
-
-// Default important flag: true if on the Important page
 const important = ref(route.name === "important");
 
-// Emit the "add-task" event
+// Define emits
 const emit = defineEmits(["add-task"]);
 
+// Function to add a task
 const addTask = () => {
   if (!title.value) {
     console.error("Task title is required.");
-    // Consider showing a user-friendly error message here
+    alertError.value = true
+    setTimeout(() => {
+      alertError.value = false;
+    }, 3000);
     return;
   }
 
-  // Create a new task object
   const task = {
-    id: Date.now(), // Unique ID for the task
-    title: title.value, // Task title
-    note: note.value, // Task note
-    date: date.value?.toString() || null, // Task deadline
-    important: important.value, // Whether the task is important
+    id: Date.now(),
+    title: title.value,
+    note: note.value,
+    date: date.value?.toString() || null,
+    important: important.value,
+    completed: false,
   };
 
-  // Emit the task to the parent component
   emit("add-task", task);
-
-  // Reset the form after submission
   resetForm();
 };
 
+// Function to reset the form
 const resetForm = () => {
   title.value = "";
-  note.value = ""; // Reset the note input
-  showNote.value = false; // Hide the note field after submission
+  note.value = "";
+  // showNote.value = false;
   date.value = route.name === "myday" ? today(getLocalTimeZone()) : undefined;
   important.value = route.name === "important";
 };
