@@ -23,7 +23,7 @@
           v-if="todayTasks.length == 0"
           class="text-center text-gray-600 mt-4"
         >
-          <p class="text-lg">No tasks for today! Enjoy your free time!</p>
+          <p class="text-sm">No tasks for today! Enjoy your free time!</p>
         </div>
         <TaskList
           :tasks="todayTasks"

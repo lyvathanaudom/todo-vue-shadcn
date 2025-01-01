@@ -3,7 +3,7 @@
     <PopoverTrigger as-child>
       <Button
         variant="outline"
-        class="w-[280px] justify-start text-left font-normal"
+        class="justify-start text-left font-normal"
       >
         <CalendarIcon class="mr-2 h-4 w-4" />
         {{ date ? df.format(date.toDate(getLocalTimeZone())) : "Pick a date" }}
@@ -22,11 +22,11 @@ import {
   type DateValue,
   getLocalTimeZone,
 } from "@internationalized/date";
+import { watch } from "vue";
 
 const props = defineProps<{
   modelValue: DateValue | undefined;
 }>();
-
 const emit = defineEmits(["update:modelValue"]);
 
 const date = computed({
@@ -36,5 +36,14 @@ const date = computed({
 
 const df = new DateFormatter("en-US", {
   dateStyle: "long",
+});
+
+// Watch the date and log the formatted date whenever it changes
+watch(date, (newDate) => {
+  if (newDate) {
+    console.log(df.format(newDate.toDate(getLocalTimeZone())));
+  } else {
+    console.log("No date selected");
+  }
 });
 </script>
