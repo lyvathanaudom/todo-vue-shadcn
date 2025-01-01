@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { type DateValue, getLocalTimeZone, isToday, today } from "@internationalized/date";
 
 // import { Button } from "@/components/ui/button";
-import { Calendar, Trash  } from "lucide-vue-next";
+import { Calendar, X  } from "lucide-vue-next";
 const props = defineProps({
   task: {
     type: Object,
@@ -55,8 +55,8 @@ const todayDate = today(getLocalTimeZone()).toString();
       </div>
     </div>
 
-      <Button class="bg-red-600" @click="$emit('delete-task', task.id)">
-        <Trash/>
+      <Button class="bg-red-400" @click="$emit('delete-task', task.id)">
+        <X/>
       </Button>
     </div>
   </Transition>

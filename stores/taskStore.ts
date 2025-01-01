@@ -24,6 +24,7 @@ export const useTaskStore = defineStore("taskStore", {
       important: boolean;
       completed: boolean;
     },
+    theme: 'light' as 'light' | 'dark', 
   }),
   getters: {
     todayTasks: (state) => {
@@ -61,9 +62,11 @@ export const useTaskStore = defineStore("taskStore", {
         this.tasks = [...this.tasks];
       }
     },
-    
     viewTask(task) {
       this.selectedTask = task;
+    },
+    setTheme(newTheme: 'light' | 'dark') { // Add action to update theme
+      this.theme = newTheme;
     },
   },
 });

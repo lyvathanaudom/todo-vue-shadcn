@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 w-72 left-0 h-full px-8 py-10 transition-all duration-300"
+    class="fixed top-0 w-80 left-0 h-full px-8 py-10 transition-all duration-300"
   >
     <!-- Sidebar Menu -->
     <div class="mt-4">

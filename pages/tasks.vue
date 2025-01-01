@@ -2,7 +2,7 @@
   <PageLayout>
     <template #header>
       <div class="mb-6 flex items-center gap-2">
-        <ClipboardList/> 
+        <ClipboardList />
         <div class="font-semibold text-2xl">All tasks</div>
       </div>
     </template>
@@ -13,7 +13,6 @@
           :tasks="tasks"
           @delete-task="deleteTask"
           @view-task="viewTask"
-          
         />
       </div>
     </template>
@@ -43,11 +42,11 @@
 
 <script setup lang="ts">
 import { useTaskStore } from "@/stores/taskStore";
-import { ClipboardList } from 'lucide-vue-next';
+import { ClipboardList } from "lucide-vue-next";
 const taskStore = useTaskStore();
 // Computed properties
 const tasks = computed(() => {
-  return taskStore.tasks.filter(task => !task.completed);
+  return taskStore.tasks.filter((task) => !task.completed);
 });
 const selectedTask = computed(() => taskStore.selectedTask);
 const completedTasks = computed(() => taskStore.completedTasks);

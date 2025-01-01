@@ -2,7 +2,7 @@
   <PageLayout>
     <template #header>
       <div class="mb-6 flex items-center gap-2">
-        <Siren/>
+        <Siren />
         <div class="font-semibold text-2xl">Important Tasks</div>
       </div>
     </template>
@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { useTaskStore } from "@/stores/taskStore";
-import { Siren } from 'lucide-vue-next';
+import { Siren } from "lucide-vue-next";
 // Access the Pinia store
 const taskStore = useTaskStore();
 

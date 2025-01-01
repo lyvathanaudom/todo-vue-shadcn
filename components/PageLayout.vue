@@ -23,7 +23,7 @@ const completedTasks = computed(() => taskStore.completedTasks);
 
     </section>
 
-    <section class="w-1/2">
+    <section class="w-2/5">
       <slot name="detail" />
     </section>
   </div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+await navigateTo('/myday')
 // Create a reactive reference for the current date
 const currentDate = ref(new Date());
 

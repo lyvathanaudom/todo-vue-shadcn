@@ -14,7 +14,17 @@
     <!-- Content -->
     <template #content>
       <TaskInput @add-task="addTask" />
+
       <div class="mt-4">
+        <div v-if="todayTasks.length > 0">
+          <p class="font-semibold mb-4">Today</p>
+        </div>
+        <div
+          v-if="todayTasks.length == 0"
+          class="text-center text-gray-600 mt-4"
+        >
+          <p class="text-lg">No tasks for today! Enjoy your free time!</p>
+        </div>
         <TaskList
           :tasks="todayTasks"
           @delete-task="deleteTask"
@@ -47,8 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { Sun } from 'lucide-vue-next';
-import { useTaskStore } from '@/stores/taskStore';
+import { Sun } from "lucide-vue-next";
+import { useTaskStore } from "@/stores/taskStore";
 // Access the Pinia store
 const taskStore = useTaskStore();
 
@@ -65,10 +75,10 @@ const handleUpdateTask = (updatedTask) => taskStore.updateTask(updatedTask);
 
 // Format current date
 const formattedDate = computed(() =>
-  new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    year: 'numeric',
+  new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    year: "numeric",
   })
 );
 </script>
