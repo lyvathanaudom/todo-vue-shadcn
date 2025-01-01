@@ -9,6 +9,15 @@
     <template #content>
       <TaskInput @add-task="addTask" />
       <div class="mt-4">
+        <div class="mb-4" v-if="importantTasks.length > 0">
+          <span class="font-semibold">Important</span>
+          <span class="text-sm ml-2">{{ importantTasks.length }}</span>        </div>
+        <div
+          v-if="importantTasks.length == 0"
+          class="text-center text-gray-600 mt-4"
+        >
+          <p class="text-sm">There's nothing important.</p>
+        </div>
         <TaskList
           :tasks="importantTasks"
           @delete-task="deleteTask"

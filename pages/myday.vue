@@ -16,8 +16,9 @@
       <TaskInput @add-task="addTask" />
 
       <div class="mt-4">
-        <div v-if="todayTasks.length > 0">
-          <p class="font-semibold mb-4">Today</p>
+        <div class="mb-4" v-if="todayTasks.length > 0">
+          <span class="font-semibold">Today</span>
+          <span class="text-sm ml-2">{{ todayTasks.length }}</span>
         </div>
         <div
           v-if="todayTasks.length == 0"
@@ -27,6 +28,16 @@
         </div>
         <TaskList
           :tasks="todayTasks"
+          @delete-task="deleteTask"
+          @view-task="viewTask"
+        />
+      </div>
+      <div class="mt-4">
+        <div class="mb-4" v-if="tomorrowTasks.length > 0">
+          <span class="font-semibold">Tomorrow</span>
+          <span class="text-sm ml-2">{{ tomorrowTasks.length }}</span>        </div>
+        <TaskList
+          :tasks="tomorrowTasks"
           @delete-task="deleteTask"
           @view-task="viewTask"
         />
@@ -63,7 +74,8 @@ import { useTaskStore } from "@/stores/taskStore";
 const taskStore = useTaskStore();
 
 // Computed properties
-const todayTasks = computed(() => [...taskStore.todayTasks].reverse());
+const todayTasks = computed(() => taskStore.todayTasks.reverse());
+const tomorrowTasks = computed(() => taskStore.tomorrowTasks.reverse());
 const completedTasks = computed(() => taskStore.completedTasks);
 const selectedTask = computed(() => taskStore.selectedTask);
 

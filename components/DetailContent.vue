@@ -65,26 +65,24 @@ const props = defineProps<{
   id: string;
   title: string;
   note: string;
-  date: string;
+  date: string | null; 
   important: boolean;
 }>();
 
-// Reactive state for editing
 const editing = ref(false);
 const editedTask = ref({
   title: props.title,
   note: props.note,
-  date: parseDate("2025-01-10"), // Set to January 10, 2025
+  date: props.date ? parseDate(props.date) : null, 
   important: props.important,
 });
 
-// Watch for changes in props and update the editedTask state
 watch(
   () => [props.title, props.note, props.date, props.important],
   ([newTitle, newNote, newDate, newImportant]) => {
     editedTask.value.title = newTitle;
     editedTask.value.note = newNote;
-    editedTask.value.date = parseDate(newDate); // Convert string to DateValue
+    editedTask.value.date = newDate ? parseDate(newDate) : null; 
     editedTask.value.important = newImportant;
   }
 );
@@ -96,13 +94,11 @@ const updateTask = () => {
     id: props.id,
     title: editedTask.value.title,
     note: editedTask.value.note,
-    date: editedTask.value.date.toString(), // Convert DateValue to string
+    date: editedTask.value.date ? editedTask.value.date.toString() : null,
     important: editedTask.value.important,
   });
   editing.value = false;
 };
-
-// Format the date for display
 const df = new DateFormatter("en-US", {
   dateStyle: "long",
 });
@@ -111,12 +107,4 @@ const formattedDate = computed(() => {
   return df.format(editedTask.value.date.toDate(getLocalTimeZone()));
 });
 
-// Log the formatted date whenever it changes
-watch(() => editedTask.value.date, (newDate) => {
-  if (newDate) {
-    console.log(df.format(newDate.toDate(getLocalTimeZone())));
-  } else {
-    console.log("No date selected");
-  }
-});
 </script>

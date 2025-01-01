@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import {
-  type DateValue,
   getLocalTimeZone,
-  isToday,
   today,
+  startOfWeek,
+  endOfWeek,
 } from "@internationalized/date";
 
 export const useTaskStore = defineStore("taskStore", {
@@ -36,6 +36,24 @@ export const useTaskStore = defineStore("taskStore", {
       return state.tasks.filter((task) => task.important && !task.completed);
     },
     completedTasks: (state) => state.tasks.filter((task) => task.completed),
+    tomorrowTasks: (state) => {
+      const todayDate = new Date();
+      const tomorrowDate = new Date(todayDate);
+      tomorrowDate.setDate(todayDate.getDate() + 2); // Add 1 day
+      const tomorrowString = tomorrowDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+      return state.tasks.filter(
+        (task) => task.date === tomorrowString && !task.completed
+      );
+    },
+    weekTasks: (state) => {
+      const todayDate = today(getLocalTimeZone());
+      const start = startOfWeek(todayDate).toString();
+      const end = endOfWeek(todayDate).toString();
+      return state.tasks.filter(
+        (task) =>
+          task.date >= start && task.date <= end && !task.completed
+      );
+    },
   },
   actions: {
     addTask(task: {
@@ -47,8 +65,6 @@ export const useTaskStore = defineStore("taskStore", {
     }) {
       const id = Math.random().toString(36).substr(2, 9); // Generate a unique ID
       this.tasks.push({ ...task, id });
-      const today = new Date().toISOString().split("T")[0];
-      console.log(today);
     },
     deleteTask(taskId: string) {
       this.tasks = this.tasks.filter((task) => task.id !== taskId);
@@ -64,6 +80,5 @@ export const useTaskStore = defineStore("taskStore", {
     viewTask(task) {
       this.selectedTask = task;
     },
-
   },
 });
