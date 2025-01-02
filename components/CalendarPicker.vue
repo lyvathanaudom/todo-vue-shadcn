@@ -10,6 +10,21 @@
       </Button>
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">
+      <Select
+        @update:model-value="(v) => {
+          if (!v) return;
+          date = today(getLocalTimeZone()).add({ days: Number(v) });
+        }"
+      >
+        <SelectTrigger>
+          <SelectValue placeholder="Select" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem v-for="item in items" :key="item.date" :value="item.date.toString()">
+            {{ item.label }}
+          </SelectItem>
+        </SelectContent>
+      </Select>
       <Calendar v-model="date" initial-focus />
     </PopoverContent>
   </Popover>
@@ -20,9 +35,9 @@ import { CalendarIcon } from "lucide-vue-next";
 import {
   DateFormatter,
   type DateValue,
+  today,
   getLocalTimeZone,
 } from "@internationalized/date";
-import { watch } from "vue";
 
 const props = defineProps<{
   modelValue: DateValue | undefined;
@@ -33,7 +48,11 @@ const date = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
 });
-
+const items = [
+  { date: 0, label: 'Today' },
+  { date: 1, label: 'Tomorrow' },
+  { date: 7, label: 'In a week' },
+]
 const df = new DateFormatter("en-US", {
   dateStyle: "long",
 });

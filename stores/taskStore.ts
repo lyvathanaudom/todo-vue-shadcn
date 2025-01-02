@@ -2,8 +2,8 @@ import { defineStore } from "pinia";
 import {
   getLocalTimeZone,
   today,
-  startOfWeek,
-  endOfWeek,
+  // startOfWeek,
+  // endOfWeek,
 } from "@internationalized/date";
 
 export const useTaskStore = defineStore("taskStore", {
@@ -24,12 +24,12 @@ export const useTaskStore = defineStore("taskStore", {
       important: boolean;
       completed: boolean;
     },
+    todayDate: today(getLocalTimeZone()).toString(),
   }),
   getters: {
     todayTasks: (state) => {
-      const todayDate = today(getLocalTimeZone()).toString();
       return state.tasks.filter(
-        (task) => task.date === todayDate && !task.completed
+        (task) => task.date === state.todayDate && !task.completed
       );
     },
     importantTasks: (state) => {
@@ -37,23 +37,21 @@ export const useTaskStore = defineStore("taskStore", {
     },
     completedTasks: (state) => state.tasks.filter((task) => task.completed),
     tomorrowTasks: (state) => {
-      const todayDate = new Date();
-      const tomorrowDate = new Date(todayDate);
-      tomorrowDate.setDate(todayDate.getDate() + 2); // Add 1 day
-      const tomorrowString = tomorrowDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+      const tomorrowDate = new Date(state.todayDate);
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+      const tomorrowString = tomorrowDate.toISOString().split("T")[0];
       return state.tasks.filter(
         (task) => task.date === tomorrowString && !task.completed
       );
     },
-    weekTasks: (state) => {
-      const todayDate = today(getLocalTimeZone());
-      const start = startOfWeek(todayDate).toString();
-      const end = endOfWeek(todayDate).toString();
-      return state.tasks.filter(
-        (task) =>
-          task.date >= start && task.date <= end && !task.completed
-      );
-    },
+    // weekTasks: (state) => {
+    //   const start = startOfWeek(today(getLocalTimeZone())).toString();
+    //   const end = endOfWeek(today(getLocalTimeZone())).toString();
+    //   return state.tasks.filter(
+    //     (task) =>
+    //       task.date >= start && task.date <= end && !task.completed
+    //   );
+    // },
   },
   actions: {
     addTask(task: {
@@ -79,6 +77,10 @@ export const useTaskStore = defineStore("taskStore", {
     },
     viewTask(task) {
       this.selectedTask = task;
+    },
+    clearAllTasks() {
+      this.tasks = [];
+      this.selectedTask = null;
     },
   },
 });

@@ -68,6 +68,12 @@
 </template>
 
 <script setup lang="ts">
+import {
+  getLocalTimeZone,
+  today,
+  startOfWeek,
+  endOfWeek,
+} from "@internationalized/date";
 import { Sun } from "lucide-vue-next";
 import { useTaskStore } from "@/stores/taskStore";
 // Access the Pinia store
@@ -84,7 +90,6 @@ const addTask = (task) => taskStore.addTask(task);
 const deleteTask = (id) => taskStore.deleteTask(id);
 const viewTask = (task) => taskStore.viewTask(task);
 const handleUpdateTask = (updatedTask) => taskStore.updateTask(updatedTask);
-
 // Format current date
 const formattedDate = computed(() =>
   new Date().toLocaleDateString("en-US", {

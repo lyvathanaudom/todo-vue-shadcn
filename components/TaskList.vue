@@ -11,6 +11,7 @@
           @view-task="$emit('view-task', task)"
         >
         </TaskItem>
+      
       </TransitionGroup>
     </div>
   </template>

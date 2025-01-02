@@ -57,7 +57,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
 import { DateFormatter, parseDate, getLocalTimeZone } from "@internationalized/date";
 
 // Define props
