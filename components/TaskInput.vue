@@ -35,14 +35,12 @@
     <!-- Submit Button -->
     <Button type="submit">Add Task</Button>
     <Transition name="fade">
-
-
-    <Alert v-show="alertError" variant="destructive">
-      <AlertCircle class="w-4 h-4" />
-      <AlertTitle>Failed</AlertTitle>
-      <AlertDescription> Please input your task</AlertDescription>
-    </Alert>
-  </Transition>
+      <Alert v-show="alertError" variant="destructive">
+        <AlertCircle class="w-4 h-4" />
+        <AlertTitle>Failed</AlertTitle>
+        <AlertDescription> Please input your task</AlertDescription>
+      </Alert>
+    </Transition>
   </form>
 </template>
 
@@ -59,8 +57,7 @@ const title = ref("");
 const note = ref("");
 const showNote = ref(false);
 const route = useRoute();
-const alertError = ref(false)
-// Initialize date and important based on the current route
+const alertError = ref(false);
 const date = ref<DateValue | undefined>(
   route.name === "myday" ? today(getLocalTimeZone()) : undefined
 );
@@ -73,7 +70,7 @@ const emit = defineEmits(["add-task"]);
 const addTask = () => {
   if (!title.value) {
     console.error("Task title is required.");
-    alertError.value = true
+    alertError.value = true;
     setTimeout(() => {
       alertError.value = false;
     }, 3000);

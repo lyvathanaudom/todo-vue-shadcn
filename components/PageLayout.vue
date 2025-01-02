@@ -2,9 +2,6 @@
 // Access the Pinia store
 const taskStore = useTaskStore();
 const completedTasks = computed(() => taskStore.completedTasks);
-const clearAllTasks = () => taskStore.clearAllTasks();
-const tasks = computed(() => taskStore.tasks);
-
 </script>
 <template>
   <div class="flex mt-6">
@@ -14,7 +11,6 @@ const tasks = computed(() => taskStore.tasks);
       </header>
       <main>
         <slot name="content" />
-        
       </main>
 
       <section class="mb-4">
@@ -24,7 +20,9 @@ const tasks = computed(() => taskStore.tasks);
         </div>
         <slot name="completed" />
       </section>
-      <Button class="text-xs" v-show="tasks.length > 0" @click="clearAllTasks"> Clear All </Button>
+      <!-- <Button class="text-xs" v-show="tasks.length > 0" @click="clearAllTasks">
+        Clear All
+      </Button> -->
     </section>
 
     <section class="w-2/5">

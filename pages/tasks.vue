@@ -11,11 +11,9 @@
       <div class="mt-4">
         <div class="mb-4" v-if="tasks.length > 0">
           <span class="font-semibold">Tasks</span>
-          <span class="text-sm ml-2">{{ tasks.length }}</span>        </div>
-        <div
-          v-if="tasks.length == 0"
-          class="text-center text-gray-600 mt-4"
-        >
+          <span class="text-sm ml-2">{{ tasks.length }}</span>
+        </div>
+        <div v-if="tasks.length == 0" class="text-center text-gray-600 mt-4">
           <p class="text-sm">There's no task. Take a deep breath.</p>
         </div>
         <TaskList
@@ -62,7 +60,7 @@ const completedTasks = computed(() => taskStore.completedTasks);
 // Task store
 // Methods
 const addTask = (task) => {
-  console.log("Adding task:", task); 
+  console.log("Adding task:", task);
   taskStore.addTask(task);
 };
 const deleteTask = (id) => {
