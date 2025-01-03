@@ -1,49 +1,3 @@
-<template>
-  <form class="flex flex-col gap-2" @submit.prevent="addTask">
-    <!-- Task Title Input -->
-    <Input
-      v-model="title"
-      @focus="showNote = true"
-      placeholder="Add a new task"
-      class="w-full"
-    />
-
-    <!-- Note Input -->
-    <Input
-      v-if="showNote"
-      v-model="note"
-      class="w-full p-3 border-2 border-solid rounded-md"
-      placeholder="Type your note here."
-    />
-
-    <!-- Date Picker and Important Checkbox -->
-    <div class="flex gap-2 items-center">
-      <CalendarPicker v-model="date" />
-      <div
-        class="flex items-center space-x-2 h-9 px-4 border-solid border-[1.5px] flex-1 rounded-md"
-      >
-        <Checkbox v-model:checked="important" id="important" />
-        <label
-          for="important"
-          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Mark as important
-        </label>
-      </div>
-    </div>
-
-    <!-- Submit Button -->
-    <Button type="submit">Add Task</Button>
-    <Transition name="fade">
-      <Alert v-show="alertError" variant="destructive">
-        <AlertCircle class="w-4 h-4" />
-        <AlertTitle>Failed</AlertTitle>
-        <AlertDescription> Please input your task</AlertDescription>
-      </Alert>
-    </Transition>
-  </form>
-</template>
-
 <script setup lang="ts">
 import { AlertCircle } from "lucide-vue-next";
 import {
@@ -99,3 +53,49 @@ const resetForm = () => {
   important.value = route.name === "important";
 };
 </script>
+
+<template>
+  <form class="flex flex-col gap-2 transition-all duration-300" @submit.prevent="addTask">
+    <!-- Task Title Input -->
+    <Input
+      v-model="title"
+      @focus="showNote = true"
+      placeholder="Add a new task"
+      class="w-full"
+    />
+
+    <!-- Note Input -->
+    <Input
+      v-if="showNote"
+      v-model="note"
+      class="w-full  p-3 border-2 border-solid rounded-md"
+      placeholder="Type your note here."
+    />
+
+    <!-- Date Picker and Important Checkbox -->
+    <div class="flex gap-2 items-center">
+      <CalendarPicker v-model="date" />
+      <div
+        class="flex items-center space-x-2 h-9 px-4 border-solid border-[1.5px] flex-1 rounded-md"
+      >
+        <Checkbox v-model:checked="important" id="important" />
+        <label
+          for="important"
+          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Mark as important
+        </label>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <Button type="submit">Add Task</Button>
+    <Transition name="fade">
+      <Alert v-show="alertError" variant="destructive">
+        <AlertCircle class="w-4 h-4" />
+        <AlertTitle>Failed</AlertTitle>
+        <AlertDescription> Please input your task</AlertDescription>
+      </Alert>
+    </Transition>
+  </form>
+</template>

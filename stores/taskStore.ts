@@ -1,40 +1,20 @@
+import { getLocalTimeZone, today } from "@internationalized/date";
 import { defineStore } from "pinia";
-import {
-  getLocalTimeZone,
-  today,
-  // startOfWeek,
-  // endOfWeek,
-} from "@internationalized/date";
+import type { Task } from "@/interfaces/task"; 
 
 export const useTaskStore = defineStore("taskStore", {
   state: () => ({
-    tasks: [] as Array<{
-      id: string;
-      title: string;
-      note: string;
-      date: string;
-      important: boolean;
-      completed: boolean;
-    }>,
-    selectedTask: null as null | {
-      id: string;
-      title: string;
-      note: string;
-      date: string;
-      important: boolean;
-      completed: boolean;
-    },
+    tasks: [] as Task[],
+    selectedTask: null as Task | null,
     todayDate: today(getLocalTimeZone()).toString(),
   }),
   getters: {
-    todayTasks: (state) => {
-      return state.tasks.filter(
+    todayTasks: (state) =>
+      state.tasks.filter(
         (task) => task.date === state.todayDate && !task.completed
-      );
-    },
-    importantTasks: (state) => {
-      return state.tasks.filter((task) => task.important && !task.completed);
-    },
+      ),
+    importantTasks: (state) =>
+      state.tasks.filter((task) => task.important && !task.completed),
     completedTasks: (state) => state.tasks.filter((task) => task.completed),
     tomorrowTasks: (state) => {
       const tomorrowDate = new Date(state.todayDate);
@@ -44,23 +24,9 @@ export const useTaskStore = defineStore("taskStore", {
         (task) => task.date === tomorrowString && !task.completed
       );
     },
-    // weekTasks: (state) => {
-    //   const start = startOfWeek(today(getLocalTimeZone())).toString();
-    //   const end = endOfWeek(today(getLocalTimeZone())).toString();
-    //   return state.tasks.filter(
-    //     (task) =>
-    //       task.date >= start && task.date <= end && !task.completed
-    //   );
-    // },
   },
   actions: {
-    addTask(task: {
-      title: string;
-      note: string;
-      date: string;
-      important: boolean;
-      completed: boolean;
-    }) {
+    addTask(task: Task) {
       const id = Math.random().toString(36).substr(2, 9); // Generate a unique ID
       this.tasks.push({ ...task, id });
     },
@@ -68,14 +34,14 @@ export const useTaskStore = defineStore("taskStore", {
       this.tasks = this.tasks.filter((task) => task.id !== taskId);
       if (this.selectedTask?.id === taskId) this.selectedTask = null;
     },
-    updateTask(updatedTask) {
+    updateTask(updatedTask: Task) {
       const index = this.tasks.findIndex((task) => task.id === updatedTask.id);
       if (index !== -1) {
         this.tasks[index] = { ...this.tasks[index], ...updatedTask }; // Merge updates
         this.tasks = [...this.tasks];
       }
     },
-    viewTask(task) {
+    viewTask(task: Task) {
       this.selectedTask = task;
     },
     clearAllTasks() {

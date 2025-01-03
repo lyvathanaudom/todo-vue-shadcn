@@ -1,9 +1,11 @@
+<script setup>
+import { Sun, Star, CircleCheck } from "lucide-vue-next";
+</script>
 <template>
   <div
-    class="fixed top-0 w-80 left-0 h-full px-8 py-10 transition-all duration-300"
+    class="fixed top-0 w-96 left-10 h-full py-10 transition-all duration-300"
   >
     <!-- Sidebar Menu -->
-    <div class="mt-4">
       <ul>
         <li
           v-for="item in [
@@ -23,11 +25,5 @@
           </nuxt-link>
         </li>
       </ul>
-    </div>
   </div>
 </template>
-
-<script setup>
-
-import { Sun, Star, CircleCheck } from "lucide-vue-next";
-</script>

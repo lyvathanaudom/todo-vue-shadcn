@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { Checkbox } from "@/components/ui/checkbox";
+import { Calendar, X } from "lucide-vue-next";
+import { ref, computed } from "vue";
 import {
   type DateValue,
   getLocalTimeZone,
   today,
 } from "@internationalized/date";
-import { Calendar, X } from "lucide-vue-next";
 
 const props = defineProps({
   task: {
@@ -15,59 +16,53 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["delete-task", "view-task"]);
+
 const viewTask = () => {
   emit("view-task", props.task);
 };
 
-// Get today's date
-const todayDate = today(getLocalTimeZone()).toString();
+// Utility function to get dates
+const getDate = (daysToAdd = 0) =>
+  today(getLocalTimeZone()).add({ days: daysToAdd }).toString();
 
-// Calculate tomorrow's date
-const tomorrowDate = today(getLocalTimeZone()).add({ days: 1 }).toString();
-
-// Calculate the date one week from today
-const nextWeekDate = today(getLocalTimeZone()).add({ days: 6 }).toString();
-console.log("Today's Date:", todayDate);
-console.log("Tomorrow's Date:", tomorrowDate);
-console.log("Next Week's Date:", nextWeekDate);
-
-// Check if the task is overdue
-const isOverdue = (taskDate: string | null | undefined) => {
-  if (!taskDate) return false;
-  const taskDateObj = new Date(taskDate);
+const todayDate = getDate();
+const tomorrowDate = getDate(1);
+const nextWeekDate = getDate(6);
+const isOverdue = computed(() => {
+  if (!props.task.date) return false;
+  const taskDateObj = new Date(props.task.date);
   const todayDateObj = new Date(todayDate);
-  console.log("Task Date:", taskDate);
-  console.log("Today's Date (inside function):", todayDate);
   return taskDateObj < todayDateObj && !props.task.completed;
-};
+});
 
-// Check if the task is more than a week away or has no date
-const isMoreThanAWeekAwayOrNoDate = (taskDate: string | null | undefined) => {
-  if (!taskDate) return true;
-  const taskDateObj = new Date(taskDate);
+const isMoreThanAWeekAwayOrNoDate = computed(() => {
+  if (!props.task.date) return true;
+  const taskDateObj = new Date(props.task.date);
   const nextWeekDateObj = new Date(nextWeekDate);
   return taskDateObj > nextWeekDateObj;
-};
+});
 
-// Check if the task is within a week
-const isWithinAWeek = (taskDate: string | null | undefined) => {
-  if (!taskDate) return false;
-  const taskDateObj = new Date(taskDate);
+const isWithinAWeek = computed(() => {
+  if (!props.task.date) return false;
+  const taskDateObj = new Date(props.task.date);
   const todayDateObj = new Date(todayDate);
   const nextWeekDateObj = new Date(nextWeekDate);
   return taskDateObj > todayDateObj && taskDateObj <= nextWeekDateObj;
-};
+});
 </script>
+
 <template>
   <Transition name="fade">
     <div
       @click="viewTask"
       :class="[
         { 'opacity-[70%]': task.completed },
-        { 'border-2 border-blue-300 border-solid': task.date === todayDate },
-        { 'border-2 border-red-500 border-solid': isOverdue(task.date) },
-        { 'border-2 border-gray-300 border-solid': isWithinAWeek(task.date) },
-        { 'border-2 border-green-300 border-solid': isMoreThanAWeekAwayOrNoDate(task.date) }
+        { 'border-2 border-blue-500 border-solid': task.date === todayDate },
+        { 'border-2 border-red-600 border-solid': isOverdue },
+        { 'border-2 border-amber-400 border-solid': isWithinAWeek },
+        {
+          'border-2 border-green-400 border-solid': isMoreThanAWeekAwayOrNoDate,
+        },
       ]"
       class="flex justify-between items-center py-2 px-4 bg-gray-100 rounded-md hover:shadow-sm transition cursor-pointer"
     >
@@ -85,7 +80,7 @@ const isWithinAWeek = (taskDate: string | null | undefined) => {
               <Calendar class="w-3" />
               <span v-if="task.date">
                 {{
-                  isOverdue(task.date)
+                  isOverdue
                     ? `Overdue on: ${task.date}`
                     : task.date === todayDate
                     ? "Today"

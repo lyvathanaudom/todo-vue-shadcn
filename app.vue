@@ -1,18 +1,15 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div class="flex h-screen">
-    <aside class="flex-none w-1/5 px-5 py-10">
-      <SideBar />
-    </aside>
-        <main id="app" class="flex-1 p-6">
-      <NuxtPage />
+  <div class="flex">
+    <main class="w-full">
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
     </main>
   </div>
 </template>
 <style>
-
 /* fade transition */
 .fade-enter-active,
 .fade-leave-active {
@@ -47,5 +44,13 @@
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+.fade-size-enter-active, .fade-size-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.fade-size-enter-from, .fade-size-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
 }
 </style>

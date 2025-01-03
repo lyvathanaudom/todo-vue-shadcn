@@ -6,12 +6,12 @@ const completedTasks = computed(() => taskStore.completedTasks);
 <template>
   <div class="flex mt-6">
     <section class="flex-1">
-      <header>
+      <!-- <header>
         <slot name="header" />
       </header>
       <main>
         <slot name="content" />
-      </main>
+      </main> -->
 
       <section class="mb-4">
         <div v-show="completedTasks.length > 0" class="mb-4 mt-6">
@@ -20,9 +20,6 @@ const completedTasks = computed(() => taskStore.completedTasks);
         </div>
         <slot name="completed" />
       </section>
-      <!-- <Button class="text-xs" v-show="tasks.length > 0" @click="clearAllTasks">
-        Clear All
-      </Button> -->
     </section>
 
     <section class="w-2/5">
